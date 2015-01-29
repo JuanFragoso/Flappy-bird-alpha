@@ -19,7 +19,7 @@ display.setDefault( "textureWrapX", "repeat" )
 display.setDefault( "textureWrapY", "repeat" )
 
 local x,y = display.contentCenterX, display.contentCenterY
-local u = display.newRect(x,480, display.contentWidth, 150 )
+local u = display.newRect(x,480, (display.viewableContentWidth + 50), 150 )
 u.fill = { type="image", filename="assets/ground.png" }
  u.fill.scaleX = 1
  u.fill.scaleY = 1
