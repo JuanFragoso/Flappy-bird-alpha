@@ -25,8 +25,8 @@ local back3 = display.newRect((x*3),480, (display.viewableContentWidth + 50), 15
 back3.fill = { type="image", filename="assets/ground.png" }
 local back4 = display.newRect((x*4),480, (display.viewableContentWidth + 50), 150 )
 back4.fill = { type="image", filename="assets/ground.png" }
-local back5 = display.newRect((x*5),480, (display.viewableContentWidth + 50), 150 )
-back5.fill = { type="image", filename="assets/ground.png" }
+--local back5 = display.newRect((x*5),480, (display.viewableContentWidth + 50), 150 )
+--back5.fill = { type="image", filename="assets/ground.png" }
 
 
  local function scrollBackground(event)
@@ -36,22 +36,22 @@ back5.fill = { type="image", filename="assets/ground.png" }
     back2.x = back2.x + xOffset
     back3.x = back3.x + xOffset
     back4.x = back4.x + xOffset
-    back5.x = back5.x + xOffset
+    --back5.x = back5.x + xOffset
     if (back1.x) < -(display.contentWidth) then
-        back1.x = (display.contentWidth*2)
+        back1.x = (display.contentWidth*1.55)
     end
     if (back2.x) < -(display.contentWidth) then
-        back2.x = (display.contentWidth*2)
+        back2.x = (display.contentWidth*1.55)
     end
     if (back3.x) < -(display.contentWidth) then
-        back3.x = (display.contentWidth*2)
+        back3.x = (display.contentWidth*1.55)
     end
     if (back4.x) < -(display.contentWidth) then
-        back4.x = (display.contentWidth*2)
+        back4.x = (display.contentWidth*1.55)
     end
-    if (back5.x) < -(display.contentWidth) then
-        back5.x = (display.contentWidth*2)
-    end
+    --if (back5.x) < -(display.contentWidth) then
+    --    back5.x = (display.contentWidth*2)
+    --end
     
 end
 
