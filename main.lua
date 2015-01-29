@@ -56,3 +56,78 @@ back4.fill = { type="image", filename="assets/ground.png" }
 end
 
 Runtime:addEventListener( "enterFrame", scrollBackground )
+
+
+
+
+
+p_options = 
+    {
+        -- Required params
+        width = 36,
+        height = 26,
+        numFrames = 3,
+        -- content scaling
+        sheetContentWidth = 108,
+        sheetContentHeight = 26,
+    }
+
+
+-- local sheet_runningCat = graphics.newImageSheet( "assets/bird.png", p_options )
+-- local sequences_runningCat = {
+--     -- consecutive frames sequence
+--     {
+--         name = "normalRun",
+--         start = 1,
+--         count = 3,
+--         time = 500,
+--         loopCount = 0,
+--         loopDirection = "forward"
+--     }
+-- }
+
+-- sequences_runningCat.x = 200
+-- sequences_runningCat.y = 200
+
+local playerSheet = graphics.newImageSheet( "assets/bird.png", p_options )
+local bird = display.newSprite( playerSheet, { name="player", start=1, count=3, time=500, loopCount = 0 } )
+
+bird.x = 150
+bird.y = 200
+bird:play()
+
+ 
+bird.anchorX = 0.5
+bird.anchorY = 0.5
+
+vs = 0
+gvt = 6
+
+--player:translate(display.contentCenterX, display.contentCenterY)
+
+function o:mouse(event)
+    if event.isPrimaryButtonDown then
+        --ab.y = ab.y - 150
+        vs = 30
+  
+    end
+end
+
+o:addEventListener('mouse', bg)
+
+local function gravity (event)
+    movementParams = {
+        x = bird.x,
+        y = bird.y - vs,
+        time = 175
+    }
+    transition.moveTo(bird, movementParams)
+    vs = vs - gvt
+
+end
+
+timer.performWithDelay(50, gravity, -1)
+
+
+
+
