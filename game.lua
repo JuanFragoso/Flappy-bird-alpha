@@ -1,8 +1,9 @@
 --game.lua
 local composer = require( "composer" )
 local scene = composer.newScene()
-local physics = require "physics"
-physics.start()
+physics = require "physics"
+physics.start(true)
+physics.setGravity( 0, 100 )
 
 -- funciones
 function scrollground(event)
@@ -67,6 +68,13 @@ function gravity (event)
     vs = vs - gvt
 
 end
+function onCollision( event )
+    if ( event.phase == "began" ) then
+       print( "began: COLLISION DETECTED!!!" )
+   elseif ( event.phase == "ended" ) then
+        print( "ended: " )
+    end
+end
 
 --iniciliazar start
 function scene:create( event )
@@ -80,44 +88,63 @@ function scene:create( event )
    coordenadas = {-130,-120,-110,-100,-90,-80,-70,-60,-50,-40,-30,-20,-10,0,10,20,30,40,50,60,70,80}
    tube1 = display.newRect(display.contentWidth*1.25,coordenadas[math.random (22)], (display.viewableContentWidth / 6), 420 )
    tube1.fill = { type="image", filename="assets/tube1.png" }
-   physics.addBody(tube1, "static", {density=1, bounce=0.1, friction=.2})
+   physics.addBody(tube1, "kinematic",{density=1, bounce=0.1, friction=.2})
+   tube1.isSleepingAllowed = false
    sceneGroup:insert(tube1)
+   tube1.myName = "tube1"
    tube2 = display.newRect(display.contentWidth*1.25,tube1.y+500, (display.viewableContentWidth / 6 ), 420 )
    tube2.fill = { type="image", filename="assets/tube2.png" }
-   physics.addBody(tube2, "static", {density=1, bounce=0.1, friction=.2})
+   physics.addBody(tube2, "kinematic",{density=1, bounce=0.1, friction=.2})
    sceneGroup:insert(tube2)
+   tube2.myName = "tube2"
+   tube2.isSleepingAllowed = false
    tube3 = display.newRect(display.contentWidth*2,coordenadas[math.random (22)], (display.viewableContentWidth / 6), 420 )
    tube3.fill = { type="image", filename="assets/tube1.png" }
-   physics.addBody(tube3, "static", {density=1, bounce=0.1, friction=.2})
+   physics.addBody(tube3, "kinematic",{density=1, bounce=0.1, friction=.2})
    sceneGroup:insert(tube3)
+   tube3.myName = "tube3"
+   tube3.isSleepingAllowed = false
    tube4 = display.newRect(display.contentWidth*2,tube3.y+500, (display.viewableContentWidth / 6 ), 420 )
    tube4.fill = { type="image", filename="assets/tube2.png" }
-   physics.addBody(tube4, "static", {density=1, bounce=0.1, friction=.2})
+   physics.addBody(tube4, "kinematic",{density=1, bounce=0.1, friction=.2})
    sceneGroup:insert(tube4)
+   tube4.myName = "tube4"
    tube5 = display.newRect(display.contentWidth*2.75,coordenadas[math.random (22)], (display.viewableContentWidth / 6), 420 )
    tube5.fill = { type="image", filename="assets/tube1.png" }
-   physics.addBody(tube5, "static", {density=1, bounce=0.1, friction=.2})
+   physics.addBody(tube5, "kinematic",{density=1, bounce=0.1, friction=.2})
    sceneGroup:insert(tube5)
+   tube5.myName = "tube5"
+   tube5.isSleepingAllowed = false
    tube6 = display.newRect(display.contentWidth*2.75,tube5.y+500, (display.viewableContentWidth / 6 ), 420 )
    tube6.fill = { type="image", filename="assets/tube2.png" }
-   physics.addBody(tube6, "static", {density=1, bounce=0.1, friction=.2})
+   physics.addBody(tube6, "kinematic",{density=1, bounce=0.1, friction=.2})
    sceneGroup:insert(tube6)
+   tube6.myName = "tube6"
+   tube6.isSleepingAllowed = false
    ground1 = display.newRect(x,480, (display.viewableContentWidth + 50), 150 )
-   physics.addBody(ground1, "static", {density=.1, bounce=0.1, friction=.2})
+   physics.addBody(ground1, "static",{density=1, bounce=0.1, friction=.2})
    ground1.fill = { type="image", filename="assets/ground.png" }
    sceneGroup:insert(ground1)
+   ground1.myName = "ground1"
+   ground1.isSleepingAllowed = false
    ground2 = display.newRect((x*2),480, (display.viewableContentWidth + 50), 150 )
-   physics.addBody(ground2, "static", {density=.1, bounce=0.1, friction=.2})
+   physics.addBody(ground2, "static",{density=1, bounce=0.1, friction=.2})
    ground2.fill = { type="image", filename="assets/ground.png" }
    sceneGroup:insert(ground2)
+   ground2.myName = "ground2"
+   ground2.isSleepingAllowed = false
    ground3 = display.newRect((x*3),480, (display.viewableContentWidth + 50), 150 )
-   physics.addBody(ground3, "static", {density=.1, bounce=0.1, friction=.2})
+   physics.addBody(ground3, "static",{density=1, bounce=0.1, friction=.2})
    ground3.fill = { type="image", filename="assets/ground.png" }
    sceneGroup:insert(ground3)
+   ground3.myName = "ground3"
+   ground3.isSleepingAllowed = false
    ground4 = display.newRect((x*4),480, (display.viewableContentWidth + 50), 150 )
-   physics.addBody(ground4, "static", {density=.1, bounce=0.1, friction=.2})
+   physics.addBody(ground4, "static",{density=1, bounce=0.1, friction=.2})
    ground4.fill = { type="image", filename="assets/ground.png" }
    sceneGroup:insert(ground4)
+   ground4.myName = "ground4"
+   ground4.isSleepingAllowed = false
    p_options = 
    {
        width = 36,
@@ -131,11 +158,14 @@ function scene:create( event )
    bird.x = 150
    bird.y = 200
    bird:play()
+   physics.addBody(bird,{ density=1.0, friction=0.3, bounce=0.2 })
+   bird.myName = "bird"
    bird.anchorX = 0.5
    bird.anchorY = 0.5
    sceneGroup:insert(bird)
    vs = 0
    gvt = 6
+
 end
 
 -- iniciar funciones
@@ -144,9 +174,9 @@ function scene:show( event )
    local phase = event.phase
    if ( phase == "will" ) then
    elseif ( phase == "did" ) then
-   	    timer.performWithDelay(50, gravity, -1)
-   	    Runtime:addEventListener("touch", fly)
-        Runtime:addEventListener( "enterFrame", scrollground )
+    Runtime:addEventListener( "collision", onCollision )
+   	Runtime:addEventListener("touch", fly)
+    Runtime:addEventListener( "enterFrame", scrollground )
    end
 end
 
@@ -155,8 +185,9 @@ function scene:hide( event )
    local sceneGroup = self.view
    local phase = event.phase
    if ( phase == "will" ) then
-   		Runtime:removeEventListener("touch", fly)
-        Runtime:removeEventListener( "enterFrame", scrollground )
+   	Runtime:removeEventListener( "collision", onCollision )
+    Runtime:removeEventListener("touch", fly)
+    Runtime:removeEventListener( "enterFrame", scrollground )
    elseif ( phase == "did" ) then
    end
 end
