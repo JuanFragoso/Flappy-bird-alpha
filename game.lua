@@ -55,9 +55,7 @@ function scrollground(event)
     end
 end
 function fly(event)
-    if event.isPrimaryButtonDown then
-        vs = 30
-    end
+        vs = 50
 end
 function gravity (event)
     movementParams = {
