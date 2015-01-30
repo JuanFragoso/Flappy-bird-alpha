@@ -8,7 +8,7 @@ physics.start()
 -- funciones
 function game(event)
      if event.phase == "ended" then
-        composer.gotoScene("game")
+        composer.gotoScene( "game" )
      end
 end
 function scrollground(event)
@@ -36,7 +36,7 @@ function scene:create( event )
    local sceneGroup = self.view
    display.setDefault( "textureWrapX", "repeat" )
    display.setDefault( "textureWrapY", "repeat" )
-   local x,y = display.contentCenterX, display.contentCenterY
+   x,y = display.contentCenterX, display.contentCenterY
    background = display.newRect( x, (y-45), (display.viewableContentWidth + 50), (display.viewableContentHeight + 100) )
    background.fill = { type="image", filename="assets/bg.png" }
    sceneGroup:insert(background)
