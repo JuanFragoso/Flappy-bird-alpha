@@ -2,22 +2,27 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 physics = require "physics"
-physics.start(true)
-physics.setGravity( 0, 100 )
+physics.start()
+playing = false
+lose = false
 
 -- funciones
 function scrollground(event)
     local xOffset = -8
-    ground1.x = ground1.x + xOffset
-    ground2.x = ground2.x + xOffset
-    ground3.x = ground3.x + xOffset
-    ground4.x = ground4.x + xOffset
-    tube1.x = tube1.x + xOffset
-    tube2.x = tube2.x + xOffset
-    tube3.x = tube3.x + xOffset
-    tube4.x = tube4.x + xOffset
-    tube5.x = tube5.x + xOffset
-    tube6.x = tube6.x + xOffset
+    if lose == false then
+     ground1.x = ground1.x + xOffset
+     ground2.x = ground2.x + xOffset
+     ground3.x = ground3.x + xOffset
+     ground4.x = ground4.x + xOffset
+     if playing == true then
+     tube1.x = tube1.x + xOffset
+     tube2.x = tube2.x + xOffset
+     tube3.x = tube3.x + xOffset
+     tube4.x = tube4.x + xOffset
+     tube5.x = tube5.x + xOffset
+     tube6.x = tube6.x + xOffset
+     end
+   end
     if (ground1.x) < -(display.contentWidth) then
         ground1.x = (display.contentWidth*1.55)
     end
@@ -56,23 +61,18 @@ function scrollground(event)
     end
 end
 function fly(event)
-        vs = 50
-end
-function gravity (event)
-    movementParams = {
-        x = bird.x,
-        y = bird.y - vs,
-        time = 175
-    }
-    transition.moveTo(bird, movementParams)
-    vs = vs - gvt
-
+  if playing == false then
+    bird:applyForce( 0,-400, bird.x, bird.y )
+    physics.setGravity(0,80)
+    playing = true
+  else
+    bird:applyForce( 0,-400, bird.x, bird.y )
+  end
 end
 function onCollision( event )
     if ( event.phase == "began" ) then
-       print( "began: COLLISION DETECTED!!!" )
-   elseif ( event.phase == "ended" ) then
-        print( "ended: " )
+      lose = true
+      bird:pause()
     end
 end
 
