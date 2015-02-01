@@ -1,7 +1,7 @@
 -- Start.lua
 
-local composer = require( "composer" )
-local scene = composer.newScene()
+local storyboard = require( "storyboard" )
+local scene = storyboard.newScene()
 physics = require "physics"
 physics.start()
 physics.setGravity(0,0)
@@ -9,11 +9,11 @@ physics.setGravity(0,0)
 -- funciones
 function game(event)
      if event.phase == "ended" then
-        composer.gotoScene( "game" )
+        storyboard.gotoScene( "game" )
      end
 end
 function scrollground(event)
-    local xOffset = -8
+    local xOffset = -5
     ground1.x = ground1.x + xOffset
     ground2.x = ground2.x + xOffset
     ground3.x = ground3.x + xOffset
@@ -33,69 +33,88 @@ function scrollground(event)
 end
 
 --iniciliazar start
-function scene:create( event )
+function scene:createScene( event )
    local sceneGroup = self.view
    display.setDefault( "textureWrapX", "repeat" )
    display.setDefault( "textureWrapY", "repeat" )
    x,y = display.contentCenterX, display.contentCenterY
-   background = display.newRect( x, (y-45), (display.viewableContentWidth + 50), (display.viewableContentHeight + 100) )
-   background.fill = { type="image", filename="assets/bg.png" }
+   background = display.newImageRect("assets/bg.png" , display.viewableContentWidth + 50, display.viewableContentHeight + 100 )
+   background.x = x; background.y = y-45
    sceneGroup:insert(background)
-   ground1 = display.newRect(x,480, (display.viewableContentWidth + 50), 150 )
-   physics.addBody(ground1, "static", {density=.1, bounce=0.1, friction=.2})
-   ground1.fill = { type="image", filename="assets/ground.png" }
+   ground1 = display.newImageRect("assets/ground.png" , display.viewableContentWidth + 50, 150)
+   ground1.x = x; ground1.y = 480
+   physics.addBody(ground1, "static",{density=1, bounce=0.1, friction=.2})
    sceneGroup:insert(ground1)
-   ground2 = display.newRect((x*2),480, (display.viewableContentWidth + 50), 150 )
-   physics.addBody(ground2, "static", {density=.1, bounce=0.1, friction=.2})
-   ground2.fill = { type="image", filename="assets/ground.png" }
+   ground2 = display.newImageRect("assets/ground.png" , display.viewableContentWidth + 50, 150)
+   ground2.x = x*2; ground2.y = 480
+   physics.addBody(ground2, "static",{density=1, bounce=0.1, friction=.2})
    sceneGroup:insert(ground2)
-   ground3 = display.newRect((x*3),480, (display.viewableContentWidth + 50), 150 )
-   physics.addBody(ground3, "static", {density=.1, bounce=0.1, friction=.2})
-   ground3.fill = { type="image", filename="assets/ground.png" }
+   ground3 = display.newImageRect("assets/ground.png" , display.viewableContentWidth + 50, 150)
+   ground3.x = x*3; ground3.y = 480
+   physics.addBody(ground3, "static",{density=1, bounce=0.1, friction=.2})
    sceneGroup:insert(ground3)
-   ground4 = display.newRect((x*4),480, (display.viewableContentWidth + 50), 150 )
-   physics.addBody(ground4, "static", {density=.1, bounce=0.1, friction=.2})
-   ground4.fill = { type="image", filename="assets/ground.png" }
+   ground4 = display.newImageRect("assets/ground.png" , display.viewableContentWidth + 50, 150)
+   ground4.x = x*4; ground4.y = 480
    sceneGroup:insert(ground4)
-   titulo = display.newRect( x, (y-100), (display.viewableContentWidth/2), 80 )
-   titulo.fill = { type="image", filename="assets/titulo.png" }
+   titulo = display.newImageRect("assets/titulo.png" , display.viewableContentWidth/2, 80)
+   titulo.x = x; titulo.y = y-100
    sceneGroup:insert(titulo)
-   playb = display.newRect( x, (y+130), (display.viewableContentWidth/3), 75 )
-   playb.fill = { type="image", filename="assets/play.png" }
+   playb = display.newImageRect("assets/play.png" , display.viewableContentWidth/3, 75)
+   playb.x = x; playb.y = y+130
    sceneGroup:insert(playb)
 end
 
--- iniciar funciones
-function scene:show( event )
+-- iniciar funciones antes de que entre la escena
+function scene:enterScene( event )
    local sceneGroup = self.view
-   local phase = event.phase
-   if ( phase == "will" ) then
-   elseif ( phase == "did" ) then
         playb:addEventListener("touch", game)
         Runtime:addEventListener( "enterFrame", scrollground )
-   end
 end
 
--- finalizar funciones
-function scene:hide( event )
+-- iniciar funciones ya que entro la escena
+function scene:enterScene( event )
    local sceneGroup = self.view
-   local phase = event.phase
-   if ( phase == "will" ) then
+        playb:addEventListener("touch", game)
+        Runtime:addEventListener( "enterFrame", scrollground )
+end
+
+-- finalizar funciones antes de que salga la escena
+function scene:exitScene( event )
+   local sceneGroup = self.view
         playb:removeEventListener("touch", game)
         Runtime:removeEventListener( "enterFrame", scrollground )
-   elseif ( phase == "did" ) then
-   end
+end
+
+-- finalizar funciones ya que salio la escena
+function scene:didExitScene( event )
+   local sceneGroup = self.view
 end
 
 --finalizar start
-function scene:destroy( event )
+function scene:destroyScene( event )
    local sceneGroup = self.view
 end
 
+-- cuando llamo el overlay
+function scene:overlayBegan( event )
+        local group = self.view
+        local overlay_name = event.sceneName
+end
+
+-- cuando oculto el overlay
+function scene:overlayEnded( event )
+        local group = self.view
+        local overlay_name = event.sceneName
+end
+
 -- listeners
-scene:addEventListener( "create", scene )
-scene:addEventListener( "show", scene )
-scene:addEventListener( "hide", scene )
-scene:addEventListener( "destroy", scene )
+scene:addEventListener( "createScene", scene )
+scene:addEventListener( "willEnterScene", scene )
+scene:addEventListener( "enterScene", scene )
+scene:addEventListener( "exitScene", scene )
+scene:addEventListener( "didExitScene", scene )
+scene:addEventListener( "destroyScene", scene )
+scene:addEventListener( "overlayBegan", scene )
+scene:addEventListener( "overlayEnded", scene )
 
 return scene
