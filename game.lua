@@ -3,6 +3,7 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 physics = require "physics"
 physics.start()
+data = require("data")
 
 
 -- funciones
@@ -65,26 +66,50 @@ function fly(event)
     physics.setGravity(0,50)
     playing = true
     getready.isVisible = false
+    text.isVisible = true
   else
     bird:setLinearVelocity( 0,-300 )
   end
 end
 function onCollision( event )
     if ( event.phase == "began" ) then
+      Runtime:removeEventListener("enterFrame", score)
       lose = true
       bird:pause()
       gameover.isVisible = true
+      text.isVisible = false
       transition.moveTo( scoreboard, { x=x, y=y, time=500 } )
       Runtime:removeEventListener("touch", fly)
       playb.isVisible = true
       Runtime:removeEventListener( "collision", onCollision )
-    end
+      audio.stop()
+      golpe = audio.loadStream( "assets/sfx_hit.mp3" )
+      audio.play(golpe)
+      timer.performWithDelay( 500, mover )
 
+    end
 end
+function mover()
+      text.x = x*1.5 - 14
+      text.y = y - 22
+      text.isVisible = true
+    end
 function game(event)
      if event.phase == "ended" then
      storyboard.gotoScene("game")
      end
+end
+function score( event )
+  if(tube1.x <= 70) and (tube1.x>= 66) then
+    data.score = data.score + 1
+  end
+  if(tube3.x <= 70) and (tube3.x>= 66) then
+    data.score = data.score + 1
+  end
+  if(tube5.x <= 70) and (tube5.x>= 66) then
+    data.score = data.score + 1
+  end
+  text.text = data.score
 end
 
 --iniciliazar start
@@ -170,6 +195,10 @@ function scene:createScene( event )
    playb.x = x; playb.y = y+130
    playb.isVisible = false
    sceneGroup:insert(playb)
+   text = display.newText(data.score,display.contentCenterX, 50, "04b_19", 20)
+   text:setFillColor(255,255,255)
+   sceneGroup:insert(text)
+   text.isVisible = false
 
 
 end
@@ -188,6 +217,9 @@ function scene:enterScene( event )
     Runtime:addEventListener( "collision", onCollision )
    	Runtime:addEventListener("touch", fly)
     Runtime:addEventListener( "enterFrame", scrollground )
+    backgroundMusic = audio.loadStream( "assets/soundtrack.mp3" )
+    audio.play( backgroundMusic, {loops=-1 } )
+    Runtime:addEventListener( "enterFrame", score )
 end
 
 -- finalizar funciones antes de que salga la pantalla
@@ -200,6 +232,10 @@ function scene:didExitScene( event )
     Runtime:removeEventListener( "enterFrame", scrollground )
     physics.setGravity(0,0)
     storyboard.removeScene("game")
+    Runtime:removeEventListener("audio", soundtrack)
+    audio.dispose(backgroundMusic)
+    Runtime:removeEventListener( "enterFrame", score )
+    data.score = 0
 end
 
 --finalizar start
