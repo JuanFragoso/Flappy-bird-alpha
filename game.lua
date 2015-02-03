@@ -1,6 +1,6 @@
 --game.lua
-local storyboard = require( "storyboard" )
-local scene = storyboard.newScene()
+storyboard = require( "storyboard" )
+scene = storyboard.newScene()
 physics = require "physics"
 physics.start()
 data = require("data")
@@ -80,7 +80,6 @@ function onCollision( event )
       text.isVisible = false
       transition.moveTo( scoreboard, { x=x, y=y, time=500 } )
       Runtime:removeEventListener("touch", fly)
-      playb.isVisible = true
       Runtime:removeEventListener( "collision", onCollision )
       audio.stop()
       golpe = audio.loadStream( "assets/sfx_hit.mp3" )
@@ -93,6 +92,7 @@ function mover()
       text.x = x*1.5 - 14
       text.y = y - 22
       text.isVisible = true
+      playb.isVisible = true
     end
 function game(event)
      if event.phase == "ended" then
