@@ -4,7 +4,7 @@ scene = storyboard.newScene()
 physics = require "physics"
 physics.start()
 data = require("data")
-
+highscore = 0
 
 -- funciones
 function scrollground(event)
@@ -84,6 +84,11 @@ function onCollision( event )
       audio.stop()
       golpe = audio.loadStream( "assets/sfx_hit.mp3" )
       audio.play(golpe)
+      load()
+      if data.score > highscore then
+        highscore = data.score
+        --timer.performWithDelay( 50, save )
+      end
       timer.performWithDelay( 500, mover )
       Runtime:removeEventListener("enterFrame", scrollground)
 
@@ -93,6 +98,8 @@ function mover()
       text.x = x*1.5 - 14
       text.y = y - 22
       text.isVisible = true
+      text2.isVisible = true
+      text2.text = highscore
       playb.isVisible = true
     end
 function game2(event)
@@ -130,6 +137,8 @@ function game2(event)
      physics.setGravity(0,0)
      bird:setLinearVelocity( 0,0 )
      getready.isVisible = true
+     text2.isVisible = false
+     save()
      timer.performWithDelay( 50, fly2 )
      end
 end
@@ -244,6 +253,10 @@ function scene:createScene( event )
    text:setFillColor(255,255,255)
    sceneGroup:insert(text)
    text.isVisible = false
+   text2 = display.newText(data.score,x*1.5 - 14, y+12, "04b_19", 20)
+   text2:setFillColor(255,255,255)
+   sceneGroup:insert(text2)
+   text2.isVisible = false
 
 
 end
@@ -298,6 +311,32 @@ end
 function scene:overlayEnded( event )
         local group = self.view
         local overlay_name = event.sceneName
+end
+
+-- Metodos para highscore
+function save()
+  local path = system.pathForFile( "score.txt", system.ResourceDirectory)
+     file = io.open(path, "w")
+    if file then
+        local contents = tostring( highscore )
+        file:write( contents )
+        io.close( file )
+    else
+      print("This is not the file you are looking for.")
+    end
+end
+
+function load()
+    local path = system.pathForFile( "score.txt", system.ResourceDirectory)
+    local contents = ""
+     file = io.open( path, "r" )
+    if file then
+         -- read all contents of file into a string
+         local contents = file:read( "*a" )
+         highscore = tonumber(contents);
+         io.close( file )
+    end
+    print("This is not the file you are looking for.")
 end
 
 
