@@ -85,6 +85,7 @@ function onCollision( event )
       golpe = audio.loadStream( "assets/sfx_hit.mp3" )
       audio.play(golpe)
       timer.performWithDelay( 500, mover )
+      Runtime:removeEventListener("enterFrame", scrollground)
 
     end
 end
@@ -94,20 +95,64 @@ function mover()
       text.isVisible = true
       playb.isVisible = true
     end
-function game(event)
+function game2(event)
      if event.phase == "ended" then
-     storyboard.gotoScene("game")
+     background.x = x; background.y = y-45
+     tube1.x = display.contentWidth*1.5; tube1.y = coordenadas[math.random (20)]
+     tube2.x = display.contentWidth*1.5; tube2.y = tube1.y+520
+     tube3.x = display.contentWidth*2.15; tube3.y = coordenadas[math.random (20)]
+     tube4.x = display.contentWidth*2.15; tube4.y = tube3.y+520
+     tube5.x = display.contentWidth*2.8; tube5.y = coordenadas[math.random (20)]
+     tube6.x = display.contentWidth*2.8; tube6.y = tube5.y+520
+     ground1.x = x; ground1.y = 480
+     ground2.x = x*2; ground2.y = 480
+     ground3.x = x*3; ground3.y = 480
+     ground4.x = x*4; ground4.y = 480
+     bird.x = 70; bird.y = y
+     getready.x = x; getready.y = y
+     scoreboard.x = x; scoreboard.y = y*3
+     gameover.x = x; gameover.y = 100
+     playb.x = x; playb.y = y+130
+     text.x = x
+     text.y = 50
+     text.isVisible = false
+     playing = false
+     lose = false
+     data.score = 0
+     bird:play()
+     Runtime:addEventListener( "collision", onCollision )
+     Runtime:addEventListener( "enterFrame", scrollground )
+     backgroundMusic = audio.loadStream( "assets/soundtrack.mp3" )
+     audio.play( backgroundMusic, {loops=-1 } )
+     Runtime:addEventListener( "enterFrame", score )
+     playb.isVisible = false
+     gameover.isVisible = false
+     physics.setGravity(0,0)
+     bird:setLinearVelocity( 0,0 )
+     getready.isVisible = true
+     timer.performWithDelay( 50, fly2 )
      end
 end
+
+function fly2()
+  Runtime:addEventListener("touch", fly)
+end
+
 function score( event )
   if(tube1.x <= 70) and (tube1.x>= 66) then
     data.score = data.score + 1
+    sfxPoint = audio.loadStream( "assets/sfx_point.mp3" )
+    audio.play( sfxPoint )
   end
   if(tube3.x <= 70) and (tube3.x>= 66) then
     data.score = data.score + 1
+    sfxPoint = audio.loadStream( "assets/sfx_point.mp3" )
+    audio.play( sfxPoint )
   end
   if(tube5.x <= 70) and (tube5.x>= 66) then
     data.score = data.score + 1
+    sfxPoint = audio.loadStream( "assets/sfx_point.mp3" )
+    audio.play( sfxPoint )
   end
   text.text = data.score
 end
@@ -213,7 +258,7 @@ end
 -- iniciar funciones ya que esta la pantalla
 function scene:enterScene( event )
    local sceneGroup = self.view
-    playb:addEventListener("touch", game)
+    playb:addEventListener("touch", game2)
     Runtime:addEventListener( "collision", onCollision )
    	Runtime:addEventListener("touch", fly)
     Runtime:addEventListener( "enterFrame", scrollground )
@@ -235,7 +280,6 @@ function scene:didExitScene( event )
     Runtime:removeEventListener("audio", soundtrack)
     audio.dispose(backgroundMusic)
     Runtime:removeEventListener( "enterFrame", score )
-    data.score = 0
 end
 
 --finalizar start

@@ -12,6 +12,7 @@ function game(event)
         storyboard.gotoScene( "game" )
      end
 end
+
 function scrollground(event)
     local xOffset = -5
     ground1.x = ground1.x + xOffset
