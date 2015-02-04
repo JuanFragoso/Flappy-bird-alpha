@@ -84,9 +84,9 @@ function onCollision( event )
       audio.stop()
       golpe = audio.loadStream( "assets/sfx_hit.mp3" )
       audio.play(golpe)
-      load()
       if data.score > highscore then
         highscore = data.score
+        save()
         --timer.performWithDelay( 50, save )
       end
       timer.performWithDelay( 500, mover )
@@ -138,7 +138,6 @@ function game2(event)
      bird:setLinearVelocity( 0,0 )
      getready.isVisible = true
      text2.isVisible = false
-     save()
      timer.performWithDelay( 50, fly2 )
      end
 end
@@ -241,7 +240,7 @@ function scene:createScene( event )
    scoreboard = display.newImageRect("assets/scoreboard.png" , display.viewableContentWidth/1.5, display.viewableContentHeight/2)
    scoreboard.x = x; scoreboard.y = y*3
    sceneGroup:insert(scoreboard)
-   gameover = display.newImageRect("assets/gameover.png" , display.viewableContentWidth/1.3, 120)
+   gameover = display.newImageRect("assets/gameover.tiff" , display.viewableContentWidth/1.3, 120)
    gameover.x = x; gameover.y = 100
    sceneGroup:insert(gameover)
    gameover.isVisible = false
@@ -253,7 +252,8 @@ function scene:createScene( event )
    text:setFillColor(255,255,255)
    sceneGroup:insert(text)
    text.isVisible = false
-   text2 = display.newText(data.score,x*1.5 - 14, y+12, "04b_19", 20)
+   load()
+   text2 = display.newText(highscore,x*1.5 - 14, y+12, "04b_19", 20)
    text2:setFillColor(255,255,255)
    sceneGroup:insert(text2)
    text2.isVisible = false
@@ -322,7 +322,7 @@ function save()
         file:write( contents )
         io.close( file )
     else
-      print("This is not the file you are looking for.")
+      print("CANT SAVE.")
     end
 end
 
@@ -335,8 +335,9 @@ function load()
          local contents = file:read( "*a" )
          highscore = tonumber(contents);
          io.close( file )
-    end
-    print("This is not the file you are looking for.")
+    else
+    print("CANT LOAD.")
+  end
 end
 
 
