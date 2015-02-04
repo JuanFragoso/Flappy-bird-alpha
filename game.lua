@@ -6,7 +6,7 @@ physics.start()
 data = require("data")
 highscore = 0
 
--- funciones
+-- functions
 function scrollground(event)
     local xOffset = -5
     if lose == false then
@@ -90,7 +90,6 @@ function onCollision( event )
       if data.score > highscore then
         highscore = data.score
         save()
-        --timer.performWithDelay( 50, save )
       end
       timer.performWithDelay( 500, mover )
       Runtime:removeEventListener("enterFrame", scrollground)
@@ -168,7 +167,7 @@ function score( event )
   text.text = data.score
 end
 
---iniciliazar start
+--funtion to create scene game
 function scene:createScene( event )
    local sceneGroup = self.view
    display.setDefault( "textureWrapX", "repeat" )
@@ -228,13 +227,11 @@ function scene:createScene( event )
    }
    playerSheet = graphics.newImageSheet( "assets/bird.png", p_options )
    bird = display.newSprite( playerSheet, { name="player", start=1, count=3, time=500, loopCount = 0 } )
-   bird.x = 70
-   bird.y = y
+   bird.x = 70; bird.y = y
    bird:play()
    physics.addBody(bird,{ density=1.0, friction=0.3, bounce=0.2 })
    bird.myName = "bird"
-   bird.anchorX = 0.5
-   bird.anchorY = 0.5
+   bird.anchorX = 0.5; bird.anchorY = 0.5
    sceneGroup:insert(bird)
    bird.isFixedRotation = true
    getready = display.newImageRect("assets/getready.png" , display.viewableContentWidth/2, display.viewableContentHeight/2)
@@ -264,14 +261,14 @@ function scene:createScene( event )
 
 end
 
--- iniciar funciones antes de que todo este en la pantalla
+-- function call it before the scene game goes on screen
 function scene:willEnterScene( event )
         local sceneGroup = self.view
         playing = false
         lose = false
 end
 
--- iniciar funciones ya que esta la pantalla
+-- function call it after the scene game goes on screen
 function scene:enterScene( event )
    local sceneGroup = self.view
     playb:addEventListener("touch", game2)
@@ -283,11 +280,12 @@ function scene:enterScene( event )
     Runtime:addEventListener( "enterFrame", score )
 end
 
--- finalizar funciones antes de que salga la pantalla
+-- function call it before the scene game goes off screen
 function scene:exitScene( event )
         local sceneGroup = self.view
 end
--- finalizar funciones ya que salio la pantalla
+
+-- function call it after the scene game goes off screen
 function scene:didExitScene( event )
    local sceneGroup = self.view
     Runtime:removeEventListener( "enterFrame", scrollground )
@@ -298,25 +296,25 @@ function scene:didExitScene( event )
     Runtime:removeEventListener( "enterFrame", score )
 end
 
---finalizar start
+--function to destroy the scene game
 function scene:destroyScene( event )
    local sceneGroup = self.view
 end
 
--- cuando llamo el overlay
+-- function to call/show an overlay
 function scene:overlayBegan( event )
         local group = self.view
         local overlay_name = event.sceneName
 end
 
 
--- cuando oculto el overlay
+-- function to quit/hide an overlay
 function scene:overlayEnded( event )
         local group = self.view
         local overlay_name = event.sceneName
 end
 
--- Metodos para highscore
+-- function to save the highsore value to a file
 function save()
   local path = system.pathForFile( "score.txt", system.ResourceDirectory)
      file = io.open(path, "w")
@@ -329,6 +327,7 @@ function save()
     end
 end
 
+-- function to load the value of the file to highscore
 function load()
     local path = system.pathForFile( "score.txt", system.ResourceDirectory)
     local contents = ""

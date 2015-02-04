@@ -6,7 +6,7 @@ physics = require "physics"
 physics.start()
 physics.setGravity(0,0)
 
--- funciones
+-- function
 function game(event)
      if event.phase == "ended" then
         storyboard.gotoScene( "game" )
@@ -33,7 +33,7 @@ function scrollground(event)
     end 
 end
 
---iniciliazar start
+--Create scene start
 function scene:createScene( event )
    local sceneGroup = self.view
    display.setDefault( "textureWrapX", "repeat" )
@@ -65,33 +65,33 @@ function scene:createScene( event )
    sceneGroup:insert(playb)
 end
 
--- iniciar funciones antes de que entre la escena
+-- funtion is call it before the scene is show on the screen
 function scene:enterScene( event )
    local sceneGroup = self.view
         playb:addEventListener("touch", game)
         Runtime:addEventListener( "enterFrame", scrollground )
 end
 
--- iniciar funciones ya que entro la escena
+-- funtion is call it after the scene is show on the screen
 function scene:enterScene( event )
    local sceneGroup = self.view
         playb:addEventListener("touch", game)
         Runtime:addEventListener( "enterFrame", scrollground )
 end
 
--- finalizar funciones antes de que salga la escena
+-- funtion call it before the scene is off the screen
 function scene:exitScene( event )
    local sceneGroup = self.view
         playb:removeEventListener("touch", game)
         Runtime:removeEventListener( "enterFrame", scrollground )
 end
 
--- finalizar funciones ya que salio la escena
+-- funtion call it before the scene is show on the screen
 function scene:didExitScene( event )
    local sceneGroup = self.view
 end
 
---finalizar start
+-- funtion call to destroy the scene start
 function scene:destroyScene( event )
    local sceneGroup = self.view
 end
