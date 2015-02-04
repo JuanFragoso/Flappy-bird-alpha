@@ -70,6 +70,9 @@ function fly(event)
   else
     bird:setLinearVelocity( 0,-300 )
   end
+  if (bird.y < -5) then
+    bird:setLinearVelocity(0, 0)
+  end
 end
 function onCollision( event )
     if ( event.phase == "began" ) then
